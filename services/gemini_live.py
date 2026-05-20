@@ -28,7 +28,10 @@ from google import genai
 from google.genai import types as genai_types
 
 from core.config import settings
-from core.persona import FALLBACK_RESPONSES as _FALLBACK_RESPONSES, FALLBACK_DEFAULT as _FALLBACK_DEFAULT
+from core.persona import (
+    FALLBACK_RESPONSES as _FALLBACK_RESPONSES,
+    FALLBACK_DEFAULT as _FALLBACK_DEFAULT,
+)
 
 log = logging.getLogger(__name__)
 
