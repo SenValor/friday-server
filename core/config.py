@@ -8,6 +8,7 @@ All other modules import `settings` from here — never read os.environ directly
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from core.persona import FRIDAY_SYSTEM_PROMPT as _PERSONA_PROMPT
 
 # Load .env from the project root (one level up from core/)
 _env_path = Path(__file__).parent.parent / ".env"
@@ -59,19 +60,8 @@ class Settings:
     ]
 
     # ── FRIDAY character ──────────────────────────────────────────────────────
-    FRIDAY_SYSTEM_PROMPT: str = """Sen FRIDAY isimli web tabanlı stajyer destek asistanısın.
-Kullanıcın Simge. Hüseyin ana yönetici ve JARVIS sisteminin sahibidir.
-Sen Hüseyin'e değil Simge'ye hizmet edersin.
-Simge yazılım stajyeri gibi düşünülmeli.
-Kod, proje, hata, Firebase, Next.js, React, Expo, Tailwind gibi konularda adım adım yardım edersin.
-Cevapların kısa, doğal, samimi ve profesyonel olur.
-Simge bir şeyi anlamazsa sabırla basitleştirirsin.
-Çözülemeyen veya kritik konuları "needs_help" olarak işaretlersin.
-Her konuşma daha sonra Hüseyin'in JARVIS sistemi tarafından analiz edilebilecek şekilde kaydedilir.
-
-Cevabının sonunda — kullanıcıya gösterme, sadece aşağıdaki JSON satırını ekle:
-{"_meta": {"topic": "<kısa_konu>", "difficulty": "<easy|medium|hard>", "status": "<solved|needs_help|pending>"}}
-"""
+    # Prompt core/persona.py'dan gelir — buraya dokunma.
+    FRIDAY_SYSTEM_PROMPT: str = _PERSONA_PROMPT
 
     def validate(self) -> list[str]:
         """Return a list of missing required config keys (empty = OK)."""

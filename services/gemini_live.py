@@ -28,6 +28,7 @@ from google import genai
 from google.genai import types as genai_types
 
 from core.config import settings
+from core.persona import FALLBACK_RESPONSES as _FALLBACK_RESPONSES, FALLBACK_DEFAULT as _FALLBACK_DEFAULT
 
 log = logging.getLogger(__name__)
 
@@ -170,8 +171,8 @@ async def generate_text_response(
 
     config = genai_types.GenerateContentConfig(
         system_instruction=settings.FRIDAY_SYSTEM_PROMPT,
-        temperature=0.7,
-        max_output_tokens=2048,
+        temperature=0.4,   # Daha tutarlı, deterministik yanıtlar
+        max_output_tokens=1024,  # Kısa ve güçlü yanıt formatına uygun
     )
 
     model = settings.GEMINI_MODEL
@@ -203,21 +204,7 @@ async def generate_text_response(
 
 
 # ─── Fallback demo yanıt (Gemini erişilemediğinde) ───────────────────────────
-
-_FALLBACK_RESPONSES: dict[str, str] = {
-    "react":      "**React** hakkında: Hooks kullanımında `useState` lokal state, `useEffect` yan etkiler (API çağrısı, abonelik) içindir. Daha spesifik bir soru sorabilirsin!\n\n_(Not: Gemini şu an erişilemiyor — demo cevap)_",
-    "typescript": "**TypeScript** hakkında: `interface` ile tip tanımla, `generic<T>` ile yeniden kullanılabilir yapılar kur. Örnek görmek ister misin?\n\n_(Not: Gemini şu an erişilemiyor — demo cevap)_",
-    "firebase":   "**Firebase** hakkında: Firestore için `collection().doc().set()` ya da `addDoc()` kullanabilirsin. Güvenlik kurallarını da unutma!\n\n_(Not: Gemini şu an erişilemiyor — demo cevap)_",
-    "next":       "**Next.js** hakkında: App Router'da `page.tsx` route, `layout.tsx` ortak layout, `loading.tsx` Suspense fallback olarak çalışır.\n\n_(Not: Gemini şu an erişilemiyor — demo cevap)_",
-    "css":        "**CSS/Tailwind** hakkında: Flexbox için `flex items-center justify-between`, Grid için `grid grid-cols-3 gap-4` kullanabilirsin.\n\n_(Not: Gemini şu an erişilemiyor — demo cevap)_",
-}
-_FALLBACK_DEFAULT = (
-    "Merhaba Simge! Sorunuzu aldım ancak şu an Gemini API'ye erişilemiyor "
-    "(kota dolmuş veya model erişim izni yok).\n\n"
-    "Yeni bir API key tanımlandığında tam yanıt alacaksın. "
-    "Bu sırada sorununu daha detaylı anlatırsan elimden geleni yapabilirim!\n\n"
-    "_(Not: Gemini şu an erişilemiyor — demo cevap)_"
-)
+# İçerik core/persona.py'dan gelir.
 
 
 def _fallback_response(user_message: str) -> "TextResponse":
