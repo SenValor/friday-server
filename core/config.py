@@ -32,10 +32,13 @@ class Settings:
     )
 
     # ── Firebase ──────────────────────────────────────────────────────────────
-    # Path to the downloaded service-account JSON file
+    # Path to the downloaded service-account JSON file (local dev)
     FIREBASE_CREDENTIALS_PATH: str = os.getenv(
         "FIREBASE_CREDENTIALS_PATH", "firebase-service-account.json"
     )
+    # Full JSON content of the service account (Railway / cloud deploy)
+    # If set, takes priority over FIREBASE_CREDENTIALS_PATH
+    FIREBASE_SERVICE_ACCOUNT_JSON: str = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON", "")
     FIREBASE_PROJECT_ID: str = os.getenv("FIREBASE_PROJECT_ID", "")
 
     # ── Server ────────────────────────────────────────────────────────────────

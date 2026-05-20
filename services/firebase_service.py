@@ -13,6 +13,7 @@ Firebase Admin SDK wrapper.
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 import uuid
 from datetime import datetime, timezone
@@ -48,7 +49,12 @@ def _get_db() -> firestore.Client:  # type: ignore[type-arg]
     cred_path = Path(settings.FIREBASE_CREDENTIALS_PATH)
     try:
         if not firebase_admin._apps:  # avoid duplicate init
-            if cred_path.exists():
+            if settings.FIREBASE_SERVICE_ACCOUNT_JSON:
+                # Cloud deploy (Railway etc.): credentials passed as JSON string env var
+                cred = credentials.Certificate(json.loads(settings.FIREBASE_SERVICE_ACCOUNT_JSON))
+                firebase_admin.initialize_app(cred, {"projectId": settings.FIREBASE_PROJECT_ID})
+                log.info("Firebase initialised from FIREBASE_SERVICE_ACCOUNT_JSON env var.")
+            elif cred_path.exists():
                 cred = credentials.Certificate(str(cred_path))
                 firebase_admin.initialize_app(cred, {"projectId": settings.FIREBASE_PROJECT_ID})
             else:
